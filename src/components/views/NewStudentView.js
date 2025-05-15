@@ -32,10 +32,16 @@ const useStyles = makeStyles( () => ({
     borderRadius: '5px 5px 0px 0px',
     padding: '3px'
   },
+  errorText: {
+    color: '#d32f2f',
+    fontSize: '0.75rem',
+    marginTop: '4px',
+    marginLeft: '14px'
+  },
 }));
 
 const NewStudentView = (props) => {
-  const {handleChange, handleSubmit } = props;
+  const {handleChange, handleSubmit, errors} = props;
   const classes = useStyles();
 
   // Render a New Student view with an input form
@@ -52,17 +58,32 @@ const NewStudentView = (props) => {
           </div>
           <form style={{textAlign: 'center'}} onSubmit={(e) => handleSubmit(e)}>
             <label style= {{color:'#11153e', fontWeight: 'bold'}}>First Name: </label>
-            <input type="text" name="firstname" onChange ={(e) => handleChange(e)} />
+            <input type="text" name="firstname" onChange ={(e) => handleChange(e)} /> {errors.firstname && <div className={classes.errorText}>{errors.firstname}</div>}
             <br/>
             <br/>
 
             <label style={{color:'#11153e', fontWeight: 'bold'}}>Last Name: </label>
-            <input type="text" name="lastname" onChange={(e) => handleChange(e)} />
+            <input type="text" name="lastname" onChange={(e) => handleChange(e)} /> {errors.lastname && <div className={classes.errorText}>{errors.lastname}</div>}
             <br/>
             <br/>
 
             <label style={{color:'#11153e', fontWeight: 'bold'}}>Campus Id: </label>
-            <input type="text" name="campusId" onChange={(e) => handleChange(e)} />
+            <input type="number" name="campusId" onChange={(e) => handleChange(e)} /> {errors.campusId && <div className={classes.errorText}>{errors.campusId}</div>}
+            <br/>
+            <br/>
+
+            <label style={{color:'#11153e', fontWeight: 'bold'}}>Email: </label>
+            <input type="text" name="email" onChange={(e) => handleChange(e)} /> {errors.email && <div className={classes.errorText}>{errors.email}</div>}
+            <br/>
+            <br/>
+
+            <label style={{color:'#11153e', fontWeight: 'bold'}}>GPA: </label>
+            <input type="number" name="gpa" step="0.01" onChange={(e) => handleChange(e)} /> {errors.gpa && <div className={classes.errorText}>{errors.gpa}</div>}
+            <br/>
+            <br/>
+
+            <label style={{color:'#11153e', fontWeight: 'bold'}}>Image URL: </label>
+            <input type="text" name="imageUrl" onChange={(e) => handleChange(e)} /> {errors.imageUrl && <div className={classes.errorText}>{errors.imageUrl}</div>}
             <br/>
             <br/>
 
