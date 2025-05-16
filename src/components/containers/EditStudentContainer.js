@@ -31,6 +31,21 @@ class EditStudentContainer extends Component {
     };
   }
 
+  //Filled in form with existed data
+  async componentDidMount() {
+    const studentId = this.props.match.params.id;
+    await this.props.fetchStudent(studentId);
+  
+    const { firstname, lastname, email, gpa, imageUrl } = this.props.student;
+    this.setState({
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      gpa: gpa || "",
+      imageUrl: imageUrl || ""
+    });
+  }
+
   // Capture input data when it is entered
   handleChange = event => {
     this.setState({
