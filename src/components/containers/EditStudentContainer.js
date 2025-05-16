@@ -36,12 +36,13 @@ class EditStudentContainer extends Component {
     const studentId = this.props.match.params.id;
     await this.props.fetchStudent(studentId);
   
-    const { firstname, lastname, email, gpa, imageUrl } = this.props.student;
+    const { firstname, lastname, email, gpa, campusId, imageUrl } = this.props.student;
     this.setState({
       firstname: firstname,
       lastname: lastname,
       email: email,
       gpa: gpa || "",
+      campusId: campusId || "",
       imageUrl: imageUrl || ""
     });
   }
