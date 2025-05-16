@@ -43,7 +43,7 @@ class EditStudentContainer extends Component {
       email: email,
       gpa: gpa || "",
       campusId: campusId || "",
-      imageUrl: imageUrl || ""
+      imageUrl: imageUrl || "",
     });
   }
 

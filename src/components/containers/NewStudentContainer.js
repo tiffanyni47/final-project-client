@@ -80,8 +80,8 @@ class NewStudentContainer extends Component {
 
     if (student.campusId && student.campusId != null){
       try {
-        const response = await axios.get(`/api/campuses/${student.campusId}/exists`);
-        if (!response.data.exists) {
+        const response = await axios.get(`/api/campuses/${student.campusId}`);
+        if (!response.data) {
           this.setState({ 
             errors: { ...this.state.errors, campusId: 'Campus ID does not exist' } 
           });

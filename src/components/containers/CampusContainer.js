@@ -26,6 +26,7 @@ class CampusContainer extends Component {
     this.props.fetchCampus(this.props.match.params.id);
   }
 
+  //If delete happens, redirect to the all campus view
   handleDelete = () => {
     this.props.deleteCampus(this.props.match.params.id)
       .then(() => this.setState({ redirect: true })) 
