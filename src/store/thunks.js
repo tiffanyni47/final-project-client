@@ -32,11 +32,26 @@ export const fetchCampusThunk = (id) => async (dispatch) => {  // The THUNK
   }
 };
 
+// Add Campus
+// THUNK CREATOR:
+export const addCampusThunk = (campus) => async (dispatch) => {  // The THUNK
+  try {
+    // API "post" call to add "campus" object's data to database
+    let res = await axios.post(`/api/campuses`, campus);  
+    // Call Action Creator to return Action object (type + payload with new students data)
+    // Then dispatch the Action object to Reducer to update state 
+    dispatch(ac.addCampus(res.data));
+    return res.data;
+  } catch(err) {
+    console.error(err);
+  }
+};
+
 // Delete Campus
 // THUNK CREATOR:
 export const deleteCampusThunk = campusId => async dispatch => {  // The THUNK
   try {
-    // API "delete" call to delete student (based on "studentID") from database
+    // API "delete" call to delete campus (based on "campusId") from database
     await axios.delete(`/api/campuses/${campusId}`);  
     // Delete successful so change state with dispatch
     dispatch(ac.deleteCampus(campusId));
