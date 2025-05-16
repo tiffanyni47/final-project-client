@@ -26,6 +26,7 @@ const CampusView = (props) => {
           </div>
         );
       })}
+      <button onClick={() => props.deleteCampus(campus.id)}>Delete Campus</button>
     </div>
   );
 };
