@@ -10,7 +10,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { 
   fetchCampusThunk,
-  deleteCampusThunk 
+  deleteCampusThunk,
+  editStudentThunk,  
+  fetchAllStudentsThunk 
 } from "../../store/thunks";
 
 import { CampusView } from "../views";
@@ -18,19 +20,47 @@ import { Redirect } from 'react-router-dom';
 
 class CampusContainer extends Component {
   state = {
-    redirect: false
+    redirect: false,
+    showAddForm: false,          
+    selectedStudentId: '',       
   };
   // Get the specific campus data from back-end database
   componentDidMount() {
     // Get campus ID from URL (API link)
     this.props.fetchCampus(this.props.match.params.id);
+    this.props.fetchAllStudents()
   }
 
-  //If delete happens, redirect to the all campus view
+  //If delete campus happens, redirect to the all campus view
   handleDelete = () => {
     this.props.deleteCampus(this.props.match.params.id)
-      .then(() => this.setState({ redirect: true })) 
-      .catch(error => console.error('Delete failed:', error));
+      .then(() => this.setState({ redirect: true }));
+  };
+
+
+  //If delete a student, the student's campusId should be set to new and disappear from the current campus 
+  handleRemoveStudent = (studentId) => {
+    this.props.editStudent({id: studentId, campusId: null})
+      .then(() => this.props.fetchCampus(this.props.match.params.id))
+      .then(() => this.props.fetchAllStudents()); 
+  };
+
+  //Add student(that does not have a campus yet) to the campus
+  handleSelectStudent = (studentId) => {
+    this.setState({selectedStudentId: studentId});
+  };
+  handleAddStudent = (studentId) => {
+    this.props.editStudent({id: studentId, campusId: this.props.match.params.id})
+      .then(() => {
+        this.setState({selectedStudentId: '', showAddForm: false});
+        this.props.fetchCampus(this.props.match.params.id);
+        this.props.fetchAllStudents();
+      });
+  };
+
+  //Form to add a new student to the campus
+  toggleAddForm = () => {
+    this.setState(prev => ({ showAddForm: !prev.showAddForm }));
   };
 
   // Render a Campus view by passing campus data as props to the corresponding View component
@@ -42,8 +72,17 @@ class CampusContainer extends Component {
     return (
       <div>
         <Header />
-        <CampusView campus={this.props.campus} 
-        deleteCampus={this.handleDelete}/>
+        <CampusView
+          campus={this.props.campus}
+          allStudents={this.props.allStudents}
+          showAddForm={this.state.showAddForm}
+          selectedStudentId={this.state.selectedStudentId}
+          onToggleAddForm={this.toggleAddForm}
+          onSelectStudent={this.handleSelectStudent}
+          onAddStudent={this.handleAddStudent}
+          deleteCampus={this.handleDelete}
+          removeStudent={this.handleRemoveStudent}
+        />
       </div>
     );
   }
@@ -55,6 +94,7 @@ class CampusContainer extends Component {
 const mapState = (state) => {
   return {
     campus: state.campus,  // Get the State object from Reducer "campus"
+    allStudents: state.allStudents 
   };
 };
 // 2. The "mapDispatch" argument is used to dispatch Action (Redux Thunk) to Redux Store.
@@ -62,7 +102,9 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     fetchCampus: (id) => dispatch(fetchCampusThunk(id)),
-    deleteCampus: (campusId) => dispatch(deleteCampusThunk(campusId),)
+    deleteCampus: (campusId) => dispatch(deleteCampusThunk(campusId),),
+    editStudent: (student) => dispatch(editStudentThunk(student)),  
+    fetchAllStudents: () => dispatch(fetchAllStudentsThunk())  
   };
 };
 
